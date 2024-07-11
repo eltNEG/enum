@@ -7,7 +7,7 @@ import (
 )
 
 type Enum[T any, E comparable] struct {
-	V        *T
+	v        *T
 	valueKey map[E]string
 }
 
@@ -97,4 +97,9 @@ func (e *Enum[T, E]) MustGetValueWithStringKey(key string) (value E) {
 		return
 	}
 	return value
+}
+
+// V return the enum values
+func (e *Enum[T, E]) V() T {
+	return *e.v
 }
