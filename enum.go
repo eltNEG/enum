@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"reflect"
 )
 
 type Enum[T any, E comparable] struct {
@@ -11,8 +12,16 @@ type Enum[T any, E comparable] struct {
 	valueKey map[E]string
 }
 
+type SimpleEnum[T any, E comparable] struct {
+	Enum[T, E]
+}
+
 type EnumValue interface {
 	~string | ~int64 | ~float64 | ~uint64 | ~int | ~uint | ~int8 | ~uint8 | ~int16 | ~uint16 | ~int32 | ~uint32
+}
+
+type MakeEnumValue interface {
+	~uint8
 }
 
 // New makes and return a new enum or returns an error
@@ -36,6 +45,25 @@ func New[E EnumValue, T any](construct T) (*Enum[T, E], error) {
 		vk[v] = k
 	}
 	return &Enum[T, E]{&construct, vk}, nil
+}
+
+func Make[E MakeEnumValue, T any](construct T) *SimpleEnum[T, E] {
+	rc := reflect.ValueOf(construct).Type()
+	n := rc.NumField()
+
+	if n > 255 {
+		panic("enum values must be less than 256")
+	}
+
+	vk := map[E]string{}
+
+	for i := 0; i < n; i++ {
+		j := E(i)
+		reflect.ValueOf(&construct).Elem().Field(i).Set(reflect.ValueOf(j))
+		vk[j] = rc.Field(i).Name
+	}
+
+	return &SimpleEnum[T, E]{Enum[T, E]{&construct, vk}}
 }
 
 // MustNew makes and returns a new enum or panics
@@ -97,6 +125,11 @@ func (e *Enum[T, E]) MustGetValueWithStringKey(key string) (value E) {
 		return
 	}
 	return value
+}
+
+func (e *SimpleEnum[T, E]) GetKeyAtIndex(value E) (string, bool) {
+	k, ok := e.valueKey[E(value)]
+	return k, ok
 }
 
 // V return the enum values
