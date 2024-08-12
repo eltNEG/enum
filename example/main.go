@@ -7,6 +7,38 @@ import (
 )
 
 func main() {
+	// Simple enum
+	type weekday uint8
+	weekdays := enum.Make[weekday](struct {
+		Monday    weekday
+		Tuesday   weekday
+		Wednesday weekday
+		Thursday  weekday
+		Friday    weekday
+		Saturday  weekday
+		Sunday    weekday
+	}{})
+
+	// Use the enum
+	fmt.Println(weekdays.V().Monday) // 0
+
+	// Verify enum value
+	fmt.Println(weekdays.IsValidValue(weekdays.V().Monday)) // true
+
+	// Verify key string
+	fmt.Println(weekdays.IsValidStringKey("Tuesday")) // true
+
+	// Get enum value with string
+	fmt.Println(weekdays.GetValueWithStringKey("Friday")) // 4, true
+
+	// Get enum key with index
+	fmt.Println(weekdays.GetKeyAtIndex(5)) // Saturday, true
+
+	// Get enum with out of range index
+	fmt.Println(weekdays.GetKeyAtIndex(7)) // "", false
+
+	fmt.Println("\n\nEnum with custom value type")
+	// Custom enum value type
 	type dicevalue uint
 	dicevalues := enum.MustNew[dicevalue](struct {
 		ONE   dicevalue

@@ -57,6 +57,59 @@ func TestNewEnum(t *testing.T) {
 	}
 }
 
+func TestMakeEnum(t *testing.T) {
+	type testenum1 uint8
+	testenumvalue1 := 0
+	testenumvalue2 := 2
+	testenumvalue3 := 3
+	testenums := enum.Make[testenum1](struct {
+		Z testenum1
+		W testenum1
+		A testenum1
+		P testenum1
+		B testenum1
+		C testenum1
+		D testenum1
+		E testenum1
+	}{})
+
+	if testenums.V().Z != testenum1(testenumvalue1) {
+		t.Errorf("Expected: %d, got %d", testenumvalue1, testenums.V().Z)
+	}
+
+	if testenums.V().A != testenum1(testenumvalue2) {
+		t.Errorf("Expected: %d, got %d", testenumvalue2, testenums.V().A)
+	}
+
+	if testenums.V().P != testenum1(testenumvalue3) {
+		t.Errorf("Expected: %d, got %d", testenumvalue2, testenums.V().P)
+	}
+
+	if testenums.V().A == testenums.V().Z || testenums.V().A == testenums.V().P || testenums.V().Z == testenums.V().P {
+		t.Errorf("Expected different values for enum keys")
+	}
+
+	if key, _ := testenums.GetKeyAtIndex(0); key != "Z" {
+		t.Errorf("Expected: Z, got %s", key)
+	}
+
+	if key, _ := testenums.GetKeyAtIndex(2); key != "A" {
+		t.Errorf("Expected: A, got %s", key)
+	}
+
+	if key, _ := testenums.GetKeyAtIndex(3); key != "P" {
+		t.Errorf("Expected: P, got %s", key)
+	}
+
+	if !testenums.IsValidValue(testenum1(0)) {
+		t.Error("Expected valid value for 0")
+	}
+
+	if testenums.IsValidValue(testenum1(100)) {
+		t.Error("Expected invalid value for 100")
+	}
+}
+
 func TestEnumMethods(t *testing.T) {
 	type sampleEnum string
 
