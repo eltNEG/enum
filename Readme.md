@@ -37,11 +37,11 @@ func main() {
 	})
 
 	// Use the dice value
-	fmt.Println(dicevalues.V.FOUR) // 4
+	fmt.Println(dicevalues.V().FOUR) // 4
 
 	// Verify dice value
-	fmt.Println(dicevalues.IsValidValue(dicevalues.V.ONE)) // true
-	fmt.Println(dicevalues.IsValidValue(dicevalue(7)))     // false
+	fmt.Println(dicevalues.IsValidValue(dicevalues.V().ONE)) // true
+	fmt.Println(dicevalues.IsValidValue(dicevalue(7)))       // false
 
 	// verify key string
 	fmt.Println(dicevalues.IsValidStringKey("THREE")) // true
@@ -60,6 +60,7 @@ func main() {
 	fmt.Println(dicevalues.MustGetKeyWithValue(6)) // SIX
 
 }
+
 ```
 
 # License

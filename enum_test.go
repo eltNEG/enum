@@ -23,12 +23,12 @@ func TestNewEnum(t *testing.T) {
 		return
 	}
 
-	if testenums.V.Key1 != testenum1(testenumvalue1) {
-		t.Errorf("Expected: %s, got %s", testenumvalue1, testenums.V.Key1)
+	if testenums.V().Key1 != testenum1(testenumvalue1) {
+		t.Errorf("Expected: %s, got %s", testenumvalue1, testenums.V().Key1)
 	}
 
-	if testenums.V.Key2 != testenum1(testenumvalue2) {
-		t.Errorf("Expected: %s, got %s", testenumvalue2, testenums.V.Key2)
+	if testenums.V().Key2 != testenum1(testenumvalue2) {
+		t.Errorf("Expected: %s, got %s", testenumvalue2, testenums.V().Key2)
 	}
 
 	type testenum2 float64
@@ -48,12 +48,12 @@ func TestNewEnum(t *testing.T) {
 		return
 	}
 
-	if testenums2.V.Key1 != testenum2(testenumvalue3) {
-		t.Errorf("Expected: %v, got %v", testenumvalue3, testenums.V.Key1)
+	if testenums2.V().Key1 != testenum2(testenumvalue3) {
+		t.Errorf("Expected: %v, got %v", testenumvalue3, testenums.V().Key1)
 	}
 
-	if testenums2.V.Key2 != testenum2(testenumvalue4) {
-		t.Errorf("Expected: %v, got %v", testenumvalue4, testenums2.V.Key2)
+	if testenums2.V().Key2 != testenum2(testenumvalue4) {
+		t.Errorf("Expected: %v, got %v", testenumvalue4, testenums2.V().Key2)
 	}
 }
 
