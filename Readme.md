@@ -1,5 +1,5 @@
 # Enum
-A library for making enums in golang using generics.
+Create enums from golang structs.
 
 # Dependencies
 - go version 1.18 and above
@@ -20,7 +20,6 @@ import (
 
 func main() {
 	// Simple enum
-	type weekday uint8
 	type weekday uint8
 	weekdays := enum.Make[weekday](struct {
 		Monday    weekday
