@@ -1,6 +1,7 @@
 package enum_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/eltNEG/enum"
@@ -10,6 +11,7 @@ func TestNewEnum(t *testing.T) {
 	type testenum1 string
 	testenumvalue1 := "testenumvalue1"
 	testenumvalue2 := "testenumvalue2"
+
 	testenums, err := enum.New[testenum1](struct {
 		Key1 testenum1
 		Key2 testenum1
@@ -55,6 +57,20 @@ func TestNewEnum(t *testing.T) {
 	if testenums2.V().Key2 != testenum2(testenumvalue4) {
 		t.Errorf("Expected: %v, got %v", testenumvalue4, testenums2.V().Key2)
 	}
+
+	keys := testenums.Keys()
+	slices.Sort(keys)
+
+	if !slices.Equal(keys, []string{"Key1", "Key2"}) {
+		t.Errorf("Expected keys to be [Key1, Key2] but got %v", testenums2.Keys())
+	}
+
+	values := testenums2.Values()
+	slices.Sort(values)
+
+	if !slices.Equal(values, []testenum2{3.4, 5.3}) {
+		t.Errorf("Expected values to be [3.4, 5.3] but got %v", testenums2.Values())
+	}
 }
 
 func TestMakeEnum(t *testing.T) {
@@ -62,14 +78,15 @@ func TestMakeEnum(t *testing.T) {
 	testenumvalue1 := 0
 	testenumvalue2 := 2
 	testenumvalue3 := 3
+
 	testenums := enum.Make[testenum1](struct {
-		Z testenum1
-		W testenum1
-		A testenum1
-		P testenum1
-		B testenum1
-		C testenum1
-		D testenum1
+		Z,
+		W,
+		A,
+		P,
+		B,
+		C,
+		D,
 		E testenum1
 	}{})
 
@@ -107,6 +124,20 @@ func TestMakeEnum(t *testing.T) {
 
 	if testenums.IsValidValue(testenum1(100)) {
 		t.Error("Expected invalid value for 100")
+	}
+
+	keys := testenums.Keys()
+	slices.Sort(keys)
+
+	if !slices.Equal(keys, []string{"A", "B", "C", "D", "E", "P", "W", "Z"}) {
+		t.Errorf("Expected keys to be [A, B, C, D, E, P, W, Z] but got %v", testenums.Keys())
+	}
+
+	values := testenums.Values()
+	slices.Sort(values)
+
+	if !slices.Equal(values, []testenum1{0, 1, 2, 3, 4, 5, 6, 7}) {
+		t.Errorf("Expected values to be [0, 1, 2, 3, 4, 5, 6, 7] but got %v", testenums.Values())
 	}
 }
 
