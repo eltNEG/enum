@@ -24,7 +24,7 @@ type MakeEnumValue interface {
 	~uint8
 }
 
-// New makes and return a new enum or returns an error
+// New makes and return a new custom enum or returns an error
 func New[E EnumValue, T any](construct T) (*Enum[T, E], error) {
 	kvBytes, err := json.Marshal(construct)
 	if err != nil {
@@ -47,6 +47,7 @@ func New[E EnumValue, T any](construct T) (*Enum[T, E], error) {
 	return &Enum[T, E]{&construct, vk}, nil
 }
 
+// Make makes a simple enum
 func Make[E MakeEnumValue, T any](construct T) *SimpleEnum[T, E] {
 	rc := reflect.ValueOf(construct).Type()
 	n := rc.NumField()
@@ -135,4 +136,24 @@ func (e *SimpleEnum[T, E]) GetKeyAtIndex(value E) (string, bool) {
 // V return the enum values
 func (e *Enum[T, E]) V() T {
 	return *e.v
+}
+
+func (e *Enum[T, E]) Keys() []string {
+	keys := make([]string, len(e.valueKey))
+	i := 0
+	for k := range e.valueKey {
+		keys[i] = e.MustGetKeyWithValue(k)
+		i++
+	}
+	return keys
+}
+
+func (e *Enum[T, E]) Values() []E {
+	values := make([]E, len(e.valueKey))
+	i := 0
+	for k := range e.valueKey {
+		values[i] = k
+		i++
+	}
+	return values
 }
